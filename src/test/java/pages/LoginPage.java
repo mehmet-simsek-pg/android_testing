@@ -6,11 +6,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 
 public class LoginPage {
 
+    private static final Logger log = LoggerFactory.getLogger(LoginPage.class);
     private final AndroidDriver driver;
     private WebDriverWait wait;
 
@@ -29,19 +32,21 @@ public class LoginPage {
 
     public void fillLoginMask(String email, String password) {
 
+        log.info("Login formu dolduruluyor: email={}, password length={}", email, password.length());
+
         wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput));
-        WebElement emailEl = driver.findElement(emailInput);
-        emailEl.click();
-        emailEl.sendKeys(email);
+        driver.findElement(emailInput).sendKeys(email);
+        log.debug("Email alanı dolduruldu.");
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput));
-        WebElement passwordEl = driver.findElement(passwordInput);
-        passwordEl.click();
-        passwordEl.sendKeys(password);
+        driver.findElement(passwordInput).sendKeys(password);
+        log.debug("Password alanı dolduruldu.");
     }
 
     public void clickLoginBtn() {
+        log.info("Login butonuna tıklanıyor...");
         wait.until(ExpectedConditions.elementToBeClickable(loginBtn));
         driver.findElement(loginBtn).click();
+        log.info("Login butonuna başarıyla tıklandı.");
     }
 }
