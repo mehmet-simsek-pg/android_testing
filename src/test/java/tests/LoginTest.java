@@ -14,6 +14,8 @@ public class LoginTest extends BaseTest{
 
         navbar.clickLoginBtn();
 
+        loginPage.waitForLoginPageLoaded();
+
         loginPage.fillLoginMask("test@example.com", "123456");
         loginPage.clickLoginBtn();
     }

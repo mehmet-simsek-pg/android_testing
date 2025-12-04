@@ -2,6 +2,7 @@ package pages;
 
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -13,30 +14,34 @@ public class LoginPage {
     private final AndroidDriver driver;
     private WebDriverWait wait;
 
-    private final String emailInputXPATH = "//android.widget.EditText[@content-desc='input-email']";
-    private final String passwordInputXPATH = "//android.widget.EditText[@content-desc='input-password']";
-    private final String loginBtnXPATH = "//android.view.ViewGroup[@content-desc='button-LOGIN']";
+    private final By emailInput = AppiumBy.xpath("//android.widget.EditText[@content-desc='input-email']");
+    private final By passwordInput = AppiumBy.xpath("//android.widget.EditText[@content-desc='input-password']");
+    private final By loginBtn = AppiumBy.xpath("//android.view.ViewGroup[@content-desc='button-LOGIN']");
 
     public LoginPage(AndroidDriver driver) {
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }
 
+    public void waitForLoginPageLoaded() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput));
+    }
+
     public void fillLoginMask(String email, String password) {
 
-        WebElement emailInput = driver.findElement(AppiumBy.xpath(emailInputXPATH));
-        System.out.println(emailInput.getText());
-        wait.until(ExpectedConditions.visibilityOf(emailInput));
-        emailInput.click();
-        emailInput.sendKeys(email);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailInput));
+        WebElement emailEl = driver.findElement(emailInput);
+        emailEl.click();
+        emailEl.sendKeys(email);
 
-        WebElement passwordInput = driver.findElement(AppiumBy.xpath(passwordInputXPATH));
-        wait.until(ExpectedConditions.visibilityOf(passwordInput));
-        passwordInput.click();
-        passwordInput.sendKeys(password);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordInput));
+        WebElement passwordEl = driver.findElement(passwordInput);
+        passwordEl.click();
+        passwordEl.sendKeys(password);
     }
 
     public void clickLoginBtn() {
-        driver.findElement(AppiumBy.xpath(loginBtnXPATH)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(loginBtn));
+        driver.findElement(loginBtn).click();
     }
 }
